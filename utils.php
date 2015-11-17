@@ -99,24 +99,24 @@ function bracesStrToAry($str)
 {
     if (!is_string($str)) return $str;
     $str = preg_replace('/\A\{|( |　)|\}\z/u', '', $str);
-    $ary = explode(',', $str);
-    return $ary;
+    $arr = explode(',', $str);
+    return $arr;
 }
 
 /**
  * 配列を{0,0,0}のような形式のstringに変換
  *
- * @param array $ary
+ * @param array $arr
  * @return string {0,0,0}の形式
  */
-function toBraces($ary)
+function toBraces($arr)
 {
-    if (!is_array($ary)) return $ary;
+    if (!is_array($arr)) return $arr;
     $str = "{";
-    for ($i = 0; $i < count($ary); $i++) {
-        $str .= $ary[$i];
+    for ($i = 0; $i < count($arr); $i++) {
+        $str .= $arr[$i];
         // 最後の値以外カンマをつける
-        if ($i != count($ary) - 1) {
+        if ($i != count($arr) - 1) {
             $str .= ",";
         }
     }
@@ -143,38 +143,57 @@ function chkFlgToJa($flag=0)
 /**
  * 全ての配列の要素に同じ値を乗算する
  *
- * @param array $ary
+ * @param array $arr
  * @return string {0,0,0}の形式
  */
-function multEachAry($ary, $operand)
+function multEachAry($arr, $operand)
 {
-    $mult = function($ary, $operand) {
-        return $ary * $operand;
+    $mult = function($arr, $operand) {
+        return $arr * $operand;
     };
-    $ret = array_map($mult, $ary, array_fill(0, count($ary), $operand));
+    $ret = array_map($mult, $arr, array_fill(0, count($arr), $operand));
     return $ret;
 }
 // 全ての配列の要素に同じ値を乗算する -> ラムダ関数版
-// $multEachAry2 = function($ary, $operand){
-//     $mult = function($ary, $operand) {
-//         return $ary * $operand;
+// $multEachAry2 = function($arr, $operand){
+//     $mult = function($arr, $operand) {
+//         return $arr * $operand;
 //     };
-//     $ret = array_map($mult, $ary, array_fill(0, count($ary), $operand));
+//     $ret = array_map($mult, $arr, array_fill(0, count($arr), $operand));
 //     return $ret;
 // };
 
 /**
  * 配列内の空文字を取り除き、添字を振り直す
  *
- * @param array $ary
+ * @param array $arr
  * @return array
  */
-function rmEmptyStrFromAry($ary)
+function rmEmptyStrFromAry($arr)
 {
     //配列の中の空要素を削除
-    $ary = array_filter($ary, "strlen");
+    $arr = array_filter($arr, "strlen");
     //添字を振り直す
-    return array_values($ary);
+    return array_values($arr);
+}
+
+/**
+ * 配列の深さを調べる
+ *
+ * @param  array $arr
+ * @return int 配列の深さ
+ */
+function array_depth($arr, $depth=0){
+    if( !is_array($arr)){
+        return $depth;
+    } else {
+        $depth++;
+        $tmp = array();
+        foreach($arr as $value){
+            $tmp[] = array_depth($value, $depth);
+        }
+        return max($tmp);
+    }
 }
 
 /******************************
@@ -484,4 +503,6 @@ function jsonEncode($value)
     return json_encode($value, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 }
 
-// テスト
+// テスト場所
+
+// echo array_depth(array(array(5),array(4)));
