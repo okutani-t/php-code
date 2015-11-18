@@ -19,23 +19,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $reply   = $_POST["email"];
 
     // 内容
-    $toSubject = 'SOFからお問い合わせがありました';
-    $toBody    = '名前: ' . $_POST["name"] .
+    $mySubject = 'SOFからお問い合わせがありました';
+    $myBody    = '名前: ' . $_POST["name"] .
                  "\n年齢: " . $_POST["age"] .
                  "\nメールアドレス: " . $_POST["email"];
 
-   $replySubject =  '[自動返信]お問い合わせありがとうございます';
-   $replyBody    =  "以下の内容でメールを送信しました。\n\n" .
-                    "名前: " . $_POST["name"] .
-                    "\n年齢: " . $_POST["age"] .
-                    "\nメールアドレス: " . $_POST["email"] .
-                    "\n\n今後ともよろしくお願いいたします。";
+    $toSubject =  '[自動返信]お問い合わせありがとうございます';
+    $toBody    =  "以下の内容でメールを送信しました。\n\n" .
+                  "名前: " . $_POST["name"] .
+                  "\n年齢: " . $_POST["age"] .
+                  "\nメールアドレス: " . $_POST["email"] .
+                  "\n\n今後ともよろしくお願いいたします。";
 
     // タイムゾーン設定
     date_default_timezone_set('Asia/Tokyo');
 
     /****************************
      * 自分宛てメール
+     ****************************/
+    $myMail = new PHPMailer;
+
+    // 文字エンコーディングの設定
+    $myMail->CharSet = "UTF-8";    // 文字セット(デフォルトは'ISO-8859-1')
+    $myMail->Encoding = "base64";  // エンコーディング(デフォルトは'8bit')
+
+    // 送信先やCC等の設定
+    $myMail->setFrom($from);
+    foreach ($to as $value) {
+        $myMail->addAddress($value);
+    }
+
+    // テキストメールの場合
+    $myMail->isHTML(false);
+
+    // 件名
+    $myMail->Subject = $mySubject;
+    // 本文
+    $myMail->Body    = $myBody;
+
+    if (!$myMail->send()) {
+        echo 'Message could not be sent.';
+        echo 'Mailer Error: ' . $myMail->ErrorInfo;
+    } else {
+        echo 'メールが送信されました(my)！';
+    }
+
+    /****************************
+     * 自動返信メール
      ****************************/
     $toMail = new PHPMailer;
 
@@ -45,9 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 送信先やCC等の設定
     $toMail->setFrom($from);
-    foreach ($to as $value) {
-        $toMail->addAddress($value);
-    }
+    $toMail->addAddress($reply);
 
     // テキストメールの場合
     $toMail->isHTML(false);
@@ -62,34 +90,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo 'Mailer Error: ' . $toMail->ErrorInfo;
     } else {
         echo 'メールが送信されました(to)！';
-    }
-
-    /****************************
-     * 自動返信メール
-     ****************************/
-    $replyMail = new PHPMailer;
-
-    // 文字エンコーディングの設定
-    $replyMail->CharSet = "UTF-8";    // 文字セット(デフォルトは'ISO-8859-1')
-    $replyMail->Encoding = "base64";  // エンコーディング(デフォルトは'8bit')
-
-    // 送信先やCC等の設定
-    $replyMail->setFrom($from);
-    $replyMail->addAddress($reply);
-
-    // テキストメールの場合
-    $replyMail->isHTML(false);
-
-    // 件名
-    $replyMail->Subject = $replySubject;
-    // 本文
-    $replyMail->Body    = $replyBody;
-
-    if (!$replyMail->send()) {
-        echo 'Message could not be sent.';
-        echo 'Mailer Error: ' . $replyMail->ErrorInfo;
-    } else {
-        echo 'メールが送信されました(reply)！';
     }
 
     unset($_POST);
