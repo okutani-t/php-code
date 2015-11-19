@@ -493,6 +493,17 @@ function d()
 }
 
 /**
+ * デバッグモードの切り替え
+ */
+function isDebug($flag=true)
+{
+    define('DEBUG', $flag);
+    define('DISPLAY_ERRORS', DEBUG ? 1 : 0); // エラーを表示するか否か(DEBUG==TRUEのとき、エラー表示モード)
+    ini_set('display_errors', DISPLAY_ERRORS);      // エラーがあるとき、表示する設定
+    error_reporting(E_ALL ^ E_NOTICE);              // NOTICE エラー以外の全てのエラーを表示する。
+}
+
+/**
  * PHPの変数をjsonに変換
  *
  * @param mixed 変数
