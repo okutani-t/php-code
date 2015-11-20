@@ -53,7 +53,7 @@ function toTimeStamp($ymd, $hi)
 {
     // 文字列かチェック
     if (!is_string($ymd) || !is_string($hi)) {
-        trigger_error("please input ymd or hi int type", E_USER_ERROR);
+        trigger_error("please input ymd or hi int type", E_USER_NOTICE);
     }
 
     // 「-」と「/」に対応
@@ -495,12 +495,12 @@ function d()
 /**
  * デバッグモードの切り替え
  */
-function isDebug($flag=true)
+function DebugMode($flag=true)
 {
     define('DEBUG', $flag);
-    define('DISPLAY_ERRORS', DEBUG ? 1 : 0); // エラーを表示するか否か(DEBUG==TRUEのとき、エラー表示モード)
-    ini_set('display_errors', DISPLAY_ERRORS);      // エラーがあるとき、表示する設定
-    error_reporting(E_ALL ^ E_NOTICE);              // NOTICE エラー以外の全てのエラーを表示する。
+    define('DISPLAY_ERRORS', DEBUG ? 1 : 0);    // エラーを表示するか否か(DEBUG==TRUEのとき、エラー表示モード)
+    ini_set('display_errors', DISPLAY_ERRORS);  // エラーがあるとき、表示する設定
+    error_reporting(E_ALL ^ E_NOTICE);          // NOTICE エラー以外の全てのエラーを表示する。
 }
 
 /**
@@ -515,5 +515,3 @@ function jsonEncode($value)
 }
 
 // テスト場所
-
-// echo array_depth(array(array(5),array(4)));
