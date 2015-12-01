@@ -514,4 +514,16 @@ function jsonEncode($value)
     return json_encode($value, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 }
 
+/**
+ * array_key_existsで正規表現を使う
+ *
+ * @param string $pattern 正規表現で記述
+ * @param array  $array キーを調べたい配列
+ * @return bool キーに一致したかどうか
+ */
+function array_key_exists_by_regexp($pattern, $array) {
+    $keys = array_keys($array);
+    return (boolean)preg_grep($pattern, $keys);
+}
+
 // テスト場所
