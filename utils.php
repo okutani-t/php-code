@@ -184,7 +184,7 @@ function rmEmptyStrFromAry($arr)
  * @return int 配列の深さ
  */
 function array_depth($arr, $depth=0){
-    if( !is_array($arr)){
+    if (!is_array($arr)) {
         return $depth;
     } else {
         $depth++;
@@ -194,6 +194,43 @@ function array_depth($arr, $depth=0){
         }
         return max($tmp);
     }
+}
+
+/**
+ * 和暦の配列を取得
+ *
+ * @param  int $period 期間を指定(デフォルトは120)
+ * @return array 和暦の配列
+ */
+function getArrWareki($period=120)
+{
+    // エラー処理
+    if (!is_int($period)) {
+        trigger_error("period type is not int...", E_USER_ERROR);
+    }
+
+    // 始まりの年
+    $startYear = date("Y", time()) - $period;
+    // 和暦の年が格納される配列
+    $yearArr = array();
+    for ($i=0; $i < $period; $i++) {
+        //平成
+        if ($startYear > 1988) {
+            $yearArr[] = "平成" . ($startYear - 1988) . "年";
+        //昭和
+        } elseif ($startYear > 1925) {
+            $yearArr[] = "昭和" . ($startYear - 1925) . "年";
+        //大正
+        } elseif ($startYear > 1911) {
+            $yearArr[] = "大正" . ($startYear - 1911) . "年";
+        //明治
+        } elseif ($startYear > 1867) {
+            $yearArr[] = "明治" . ($startYear - 1867) . "年";
+        }
+        $startYear++;
+    }
+
+    return $yearArr;
 }
 
 /******************************
