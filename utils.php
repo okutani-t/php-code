@@ -299,6 +299,30 @@ function fileDelimit($delimiter="", $file_path=false)
     return array($lAry, $rAry);
 }
 
+/**
+ * CSVファイルの読み込み
+ *
+ * @param string $filePath CSVファイルまでのパス
+ * @return array $records
+ */
+function leadCsvFile($filePath="")
+{
+    if ($filePath === "") {
+        trigger_error("please input csv path...", E_USER_ERROR);
+    }
+
+    $data = file_get_contents($filePath);
+    $data = mb_convert_encoding($data, "UTF-8", "sjis-win");
+
+    $lines = explode("\r\n", $data);
+
+    foreach ($lines as $line) {
+        $records[] = str_getcsv($line);
+    }
+
+    return $records;
+}
+
 /******************************
  * 改行の処理
  ******************************/
