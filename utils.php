@@ -312,7 +312,7 @@ function leadCsvFile($filePath="")
     }
 
     $data = file_get_contents($filePath);
-    $data = mb_convert_encoding($data, "UTF-8", "sjis-win");
+    $data = rtrim(mb_convert_encoding($data, "UTF-8", "sjis-win"));
 
     $lines = explode("\r\n", $data);
 
