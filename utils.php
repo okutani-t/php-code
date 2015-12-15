@@ -210,7 +210,7 @@ function getArrWareki($period=120)
     }
 
     // 始まりの年
-    $startYear = date("Y", time()) - $period;
+    $startYear = date("Y", time()) - $period + 1;
     // 和暦の年が格納される配列
     $yearArr = array();
     for ($i=0; $i < $period; $i++) {
