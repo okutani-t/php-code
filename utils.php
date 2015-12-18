@@ -233,6 +233,30 @@ function getArrWareki($period=120)
     return $yearArr;
 }
 
+/**
+ * 配列の最後のkeyを取得
+ *
+ * @param array $arr
+ * @return string 配列の最後のキー
+ */
+function endKey($arr)
+{
+    end($arr);
+    return key($arr);
+}
+
+/**
+ * 配列の最初のkeyを取得
+ *
+ * @param array $arr
+ * @return string 配列の最後のキー
+ */
+function firstKey($arr)
+{
+    reset($arr);
+    return key($arr);
+}
+
 /******************************
  * ディレクトリ・ファイル操作
  ******************************/
