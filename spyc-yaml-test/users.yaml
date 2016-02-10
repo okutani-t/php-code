@@ -1,0 +1,11 @@
+---
+users:
+    - id: 1
+      name: tanaka
+      email: tanaka@test.com
+    - id: 2
+      name: yamada
+      email: tanaka@test.com
+    - id: 3
+      name: yoshida
+      email: yoshida@test.com
