@@ -1,0 +1,42 @@
+.container {
+  width: 600px;
+  height: 600px;
+  margin: 0 auto;
+  border: 1px solid #bbb;
+}
+
+.series_list {
+  padding: 30px;
+  border: 1px solid #ccc;
+  border-radius: 40px;
+  box-shadow: 0 0 3px #ccc;
+  list-style-position: inside;
+  /*カウンター*/
+  counter-reset: series-count;
+  list-style:none;
+  margin: 0 10px;
+}
+.series_list li {
+  margin: 15px 10px;
+  padding-left: 1.8em;
+  line-height: 1.5;
+  position: relative;
+}
+/**
+ * カウンター実装はここを参考
+ * https://blog.quusookagaku.com/14859
+ */
+.series_list li:before {
+  counter-increment: series-count;
+  content: counter(series-count);
+  background: #ccc;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  line-height: 1.4;
+  position: absolute;
+  left: 0;
+  top: 0;
+}

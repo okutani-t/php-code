@@ -5,9 +5,9 @@
  * "URL" => "TITLE",
  */
 $series_list = array(
-    "http://google.com" => "グーグルのサイトです。",
+    "http://google.com" => "グーグルのサイトです。グーグルのサイトです。グーグルのサイトです。グーグルのサイトです。",
     "http://yahoo.co.jp" => "Yahooのサイトです。",
-    "http://vdeep.net" => "vdeepのサイトです。",
+    "http://vdeep.net" => "Vdeepのサイトです。vdeepのサイトです。vdeepのサイトです。vdeepのサイトです。vdeepのサイトです。vdeepのサイトです。",
     "http://localhost/php-code/php-code/series-post-test/series_post_test.php" => "今見てるページです。",
 );
 
@@ -32,4 +32,21 @@ $ret_list = "<ol class='series_list'>" . "\n";
 $ret_list .= "</ol>\n";
 
 # echo
-echo $ret_list;
+// echo $ret_list;
+
+?>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>series post test</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container">
+            <?php echo $ret_list; ?>
+        </div>
+    </body>
+</html>
