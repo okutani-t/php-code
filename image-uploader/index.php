@@ -2,10 +2,9 @@
 
 session_start();
 ini_set("display_errors", 1);
-define("MAX_FILE_SIZE", 1 * 1024 * 1024); // 3MB
-define("THUMBNAIL_WIDTH", 400);
+define("MAX_FILE_SIZE", 10 * 1024 * 1024); // 3MB
+define("RESIZE_MAX_WIDTH", 3000);
 define("IMAGES_DIR", __DIR__ . "/images");
-define("THUMBNAIL_DIR", __DIR__ . "/thumbs");
 
 if (!function_exists("imagecreatetruecolor")) {
     echo "GD not installed!";
@@ -35,7 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $uploader->upload();
 }
 
+// サクセス・エラー文の取得
 list($success, $error) = $uploader->getResults();
+// 画像ファイルパスの取得
 $images = $uploader->getImages();
 
 ?>
@@ -44,56 +45,7 @@ $images = $uploader->getImages();
 <head>
     <meta charset="utf-8">
     <title>Image Uploader</title>
-    <style>
-    body {
-        text-align: center;
-        font-family: Arial, sans-serif;
-    }
-    ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-    li {
-        margin-bottom: 20px;
-        box-shadow: 0 0 1px 1px #aaa;
-    }
-
-    input[type=file] {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
-        opacity: 0;
-    }
-    .btn {
-        position: relative;
-        display: inline-block;
-        width: 300px;
-        padding: 7px;
-        border-radius: 4px;
-        margin: 10px auto 20px;
-        color: #fff;
-        box-shadow: 0 4px #0088cc;
-        background: #00aaff;
-    }
-    .btn:hover {
-        opacity: 0.8;
-    }
-    .msg {
-        margin: 0 auto 15px;
-        width: 400px;
-        font-weight: bold;
-    }
-    .msg.success {
-        color: #4caf50;
-    }
-    .msg.error {
-        color: #f44336;
-    }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -117,7 +69,7 @@ $images = $uploader->getImages();
             <!-- 画像の表示 -->
             <li>
                 <a href="<?php echo h(basename(IMAGES_DIR)) . "/" . basename($image); ?>">
-                    <img src="<?php echo h($image); ?>">
+                    <img src="<?php echo h($image); ?>" width="300">
                 </a>
             </li>
 

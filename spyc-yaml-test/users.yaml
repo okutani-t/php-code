@@ -5,7 +5,11 @@ users:
       email: tanaka@test.com
     - id: 2
       name: yamada
-      email: tanaka@test.com
+      email: yamada@test.com
     - id: 3
       name: yoshida
       email: yoshida@test.com
+---
+admin:
+    name: yamamoto
+    email: yamamoto@test.com
