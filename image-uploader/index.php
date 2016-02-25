@@ -2,8 +2,8 @@
 
 session_start();
 ini_set("display_errors", 1);
-define("MAX_FILE_SIZE", 10 * 1024 * 1024); // 3MB
-define("RESIZE_MAX_WIDTH", 3000);
+define("MAX_FILE_SIZE", 3 * 1024 * 1024); // 3MB
+define("RESIZE_MAX_WIDTH", 2000);
 define("IMAGES_DIR", __DIR__ . "/images");
 
 if (!function_exists("imagecreatetruecolor")) {
@@ -20,8 +20,17 @@ require "ImageUploader.php";
 $uploader = new \MyApp\ImageUploader();
 
 // delete
-if ($_SERVER["REQUEST_METHOD"] === "POST" && $_POST["action"] === "imgDel") {
-    $uploader->delete();
+if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST["delPath"])) {
+    try {
+        $isDelImg = unlink(IMAGES_DIR . "/" . basename($_POST["delPath"]));
+        if ($isDelImg) {
+            $_SESSION["success"] = "Delete Done!";
+        } else {
+            throw new \Exception("Image can't be deleted!");
+        }
+    } catch (\Exception $e) {
+        $_SESSION["error"] = $e->getMessage();
+    }
     // redirect
     header("Location: " .
     (empty($_SERVER["HTTPS"]) ? "http://" : "https://") .
@@ -29,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && $_POST["action"] === "imgDel") {
     $_SERVER["REQUEST_URI"]);
     exit;
 }
+
 // upload
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $uploader->upload();
@@ -45,57 +55,115 @@ $images = $uploader->getImages();
 <head>
     <meta charset="utf-8">
     <title>Image Uploader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- header -->
+    <header class="header">
+        <nav>
+            <div class="nav-wrapper">
+                <div class="container">
+                    <a href="" class="brand-logo">Image Uploader</a>
+                    <ul class="right">
+                        <li><a href="">
+                            <i class="material-icons">close</i>
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-    <div class="btn">
-        Upload!
-        <form action="" method="post" enctype="multipart/form-data" id="my_form">
-            <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo h(MAX_FILE_SIZE); ?>">
-            <input type="hidden" name="action" value="">
-            <input type="file" name="image" id="my_file">
-        </form>
-    </div>
+    <div class="container">
 
-    <?php if (isset($success)) : ?>
-        <div class="msg success"><?php echo h($success); ?></div>
-    <?php endif; ?>
-    <?php if (isset($error)) : ?>
-        <div class="msg error"><?php echo h($error); ?></div>
-    <?php endif; ?>
-    <ul>
-        <?php foreach ($images as $image) : ?>
-            <!-- 画像の表示 -->
-            <li>
-                <a href="<?php echo h(basename(IMAGES_DIR)) . "/" . basename($image); ?>">
-                    <img src="<?php echo h($image); ?>" width="300">
-                </a>
-            </li>
+        <div class="row">
+            <!-- upload button -->
+            <div class="col l2 s4">
+                <form action="" method="post" enctype="multipart/form-data" id="my_form">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo h(MAX_FILE_SIZE); ?>">
+                    <input type="hidden" name="delPath" value="">
+                    <input type="hidden" name="dlPath" value="">
+                    <div class="file-field input-field">
+                        <div class="w100p btn waves-effect waves-yellow btn-large">
+                            <span>Upload! <i class="mdi-content-send right"></i></span>
+                            <input type="file" name="image" id="my_file">
+                        </div>
+                    </div>
+                </form>
+            </div>
 
-            <!-- 画像までのフルパス -->
-            <li>
-                <?php echo dirname((empty($_SERVER["HTTPS"]) ? "http://" : "https://") .
-                $_SERVER["HTTP_HOST"] .
-                $_SERVER["REQUEST_URI"]) . "/" .
-                $image; ?>
-            </li>
+            <!-- msg -->
+            <?php if (isset($success)) : ?>
+                <div class="col offset-l1 l8 s8 msg success card-panel teal lighten-2">
+                    <h4 class="white-text center-align">
+                        <?php echo h($success); ?>
+                    </h4>
+                </div>
+            <?php endif; ?>
+            <?php if (isset($error)) : ?>
+                <div class="col offset-l1 l8 s8 msg error card-panel red lighten-1">
+                    <h4 class="white-text center-align">
+                        <?php echo h($error); ?>
+                    </h4>
+                </div>
+            <?php endif; ?>
+        </div><!-- /row -->
 
-            <button type="button" name="delete" data-img-name="<?php echo h($image); ?>">delete</button><br><br>
-        <?php endforeach ?>
-    </ul>
+        <!-- img list -->
+        <div class="row">
+            <?php foreach ($images as $image) : ?>
+                <!-- 画像の表示 -->
+                <div class="card-box col l4 m6 s12">
+                    <div class="card hoverable">
+                        <div class="card-image">
+                            <img class="materialboxed" src="<?php echo h($image); ?>" width="400"alt="Title">
+                            <span class="card-title">Title</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="row">
+                                <!-- Download btn -->
+                                <div class="col s7">
+                                    <a href="<?php echo h($image); ?>" class="w100p download-btn valign w100p waves-effect waves-light btn teil lighten-2"
+                                    data-img-name="<?php echo h($image); ?>" download="<?php echo h(basename($image)); ?>">
+                                    Download
+                                </a>
+                            </div>
+                            <!-- Delete btn -->
+                            <div class="col s5">
+                                <div class="w100p delete-btn waves-effect waves-light btn pink lighten-1"
+                                data-img-name="<?php echo h($image); ?>">
+                                Delete
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach ?>
+</div><!-- /img list row -->
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>
-    $(function(){
-        $('.msg').fadeOut(3000);
-        $("#my_file").on("change", function() {
-            $("#my_form").submit();
-        });
-        $("[name=delete]").click(function(){
-            alert($(this).data("img-name"));
-        });
+</div><!-- /container -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+<script>
+$(function(){
+    // メッセージのフェードアウト
+    $('.msg').fadeOut(5000);
+    // submit
+    $("#my_file").on("change", function() {
+        $("#my_form").submit();
     });
-    </script>
+    // 削除
+    $(".delete-btn").click(function() {
+        $("[name=delPath]").val($(this).data("img-name"));
+        $("#my_form").submit();
+    });
+});
+
+</script>
 </body>
 </html>
