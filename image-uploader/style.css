@@ -16,6 +16,12 @@
 .input-field {
   margin-top: 0px;
 }
+@media all and (max-width: 600px) {
+  .upload-box {
+    margin-bottom: 10px;
+  }
+}
+
 /*msg*/
 .msg.card-panel {
     font-weight: bold;
