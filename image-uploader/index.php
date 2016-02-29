@@ -72,7 +72,7 @@ $images = $uploader->getImages();
                 <div class="container">
                     <a href="" class="brand-logo">Image Uploader</a>
                     <ul class="right">
-                        <li><a href="">
+                        <li><a href="javascript:void(0);" class="window-close">
                             <i class="material-icons">close</i>
                         </a></li>
                     </ul>
@@ -120,23 +120,23 @@ $images = $uploader->getImages();
         <div class="row grid">
             <?php foreach ($images as $image) : ?>
                 <!-- 画像の表示 -->
-                <div class="card-box grid-item col l4 m6 s12">
+                <div class="card-box grid-item col l3 m4 s6">
                     <div class="card hoverable">
                         <div class="card-image">
                             <img class="materialboxed" src="<?php echo h($image); ?>" width="400" alt="Title">
                             <span class="card-title">Title</span>
                         </div>
                         <div class="card-content">
-                            <div class="row">
+                            <div class="row m0">
                                 <!-- Download btn -->
-                                <div class="col s7">
+                                <div class="col s12 mb10">
                                     <a href="<?php echo h($image); ?>" class="w100p download-btn valign w100p waves-effect waves-light btn teil lighten-2"
                                         data-img-name="<?php echo h($image); ?>" download="<?php echo h(basename($image)); ?>">
                                         Download
                                     </a>
                                 </div>
                                 <!-- Delete btn -->
-                                <div class="col s5">
+                                <div class="col s12">
                                     <div class="w100p delete-btn waves-effect waves-light btn pink lighten-1"
                                     data-img-name="<?php echo h($image); ?>">
                                     Delete
@@ -155,18 +155,28 @@ $images = $uploader->getImages();
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
 <script src="https://npmcdn.com/masonry-layout@4.0/dist/masonry.pkgd.min.js"></script>
 <script src="https://npmcdn.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lazyload/2.0.3/lazyload.js"></script>
 <script>
 $(function(){
     // メッセージのフェードアウト
-    $('.msg').fadeOut(5000);
+    $('.msg').fadeOut(4000);
     // submit
     $("#my_file").on("change", function() {
         $("#my_form").submit();
     });
-    // 削除
+    // 画像削除
     $(".delete-btn").click(function() {
-        $("[name=delPath]").val($(this).data("img-name"));
-        $("#my_form").submit();
+        if (confirm("本当に削除しますか？")) {
+            $("[name=delPath]").val($(this).data("img-name"));
+            $("#my_form").submit();
+        }
+    });
+    // window close
+    $(".window-close").click(function() {
+        if (confirm("本当にウィンドウを閉じますか？")) {
+            window.close();
+            return false;
+        }
     });
     // masonry
     var $grid = $('.grid');
@@ -177,6 +187,8 @@ $(function(){
             isAnimated: true
         });
     });
+    // lazy load
+
 });
 
 </script>
