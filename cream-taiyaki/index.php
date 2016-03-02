@@ -35,6 +35,9 @@ EOM;
      p {
        font-size: 1.4em;
      }
+     .mb30 {
+       margin-bottom: 30px;
+     }
      #cream_taiyaki {
        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
        cursor: pointer;
@@ -54,8 +57,8 @@ EOM;
       <div class="container">
         <h1>クリームたいやきチェッカー！</h1>
         <p>click me!</p>
-        <p style="margin-bottom: 30px;">↓</p>
-        <img id="cream_taiyaki" class="wow bounce img-responsive center-block img-circle infinite" data-wow-duration="2.0s" src="cream-taiyaki.jpg" alt="クリームたいやき">
+        <p class="mb30">↓</p>
+        <img id="cream_taiyaki" class="wow bounce mb30 img-responsive center-block img-circle infinite" data-wow-duration="2.0s" src="cream-taiyaki.jpg" alt="クリームたいやき">
       </div>
     </form>
 
@@ -65,7 +68,9 @@ EOM;
     <script>
      $(function(){
        // wow.js
-       new WOW().init();
+       new WOW({
+         mobile: false
+       }).init();
        // cream taiyaki click
        $("#cream_taiyaki").on("click", function(){
          if (confirm("本当に食べた？slackに送信するよ？")) {
