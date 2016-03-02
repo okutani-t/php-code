@@ -609,5 +609,17 @@ function array_key_exists_by_regexp($pattern, $array) {
     $keys = array_keys($array);
     return (boolean)preg_grep($pattern, $keys);
 }
+/**
+ * リダイレクト処理
+ * 現在表示してるパスに飛ぶ
+ */
+function redirect()
+{
+    header("Location: " .
+    (empty($_SERVER["HTTPS"]) ? "http://" : "https://") .
+    $_SERVER["HTTP_HOST"] .
+    $_SERVER["REQUEST_URI"]);
+    exit;
+}
 
 // テスト場所
