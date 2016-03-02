@@ -58,4 +58,3 @@ while (false !== ($file = readdir($images_dirs))) {
     // sort
     array_multisort($files, SORT_DESC, $ym_images);
 }
-var_dump($ym_images);
