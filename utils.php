@@ -619,6 +619,7 @@ function redirect()
     (empty($_SERVER["HTTPS"]) ? "http://" : "https://") .
     $_SERVER["HTTP_HOST"] .
     $_SERVER["REQUEST_URI"]);
+    // parse_url($_SERVER["REQUEST_URI"])["path"]); # パラメーターを取り除きたいとき
     exit;
 }
 

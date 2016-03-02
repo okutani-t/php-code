@@ -1,4 +1,5 @@
 <?php require_once "Controller.php"; ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -48,16 +49,32 @@
                 </form>
             </div>
 
+            <!-- select box -->
+            <form id="ym_select" action="" method="get">
+                <div class="input-field col m3 s12">
+                    <select name="ym">
+                        <option value="" disabled <?php if (CURRENT_YM === "") {
+                            echo "selected";
+                        } ?>>年月を選択 [<?php echo date("Y年m月", time()); ?>]</option>
+                        <?php foreach ($ym_images as $key => $value) : ?>
+                            <option value="<?php echo $key ?>" <?php if (CURRENT_YM === $key) {
+                                echo "selected";
+                            } ?>><?php echo $value ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </form>
+
             <!-- msg -->
             <?php if (isset($success)) : ?>
-                <div class="col offset-m1 m7 s12 msg success card-panel teal lighten-2">
+                <div class="col offset-m1 m4 s12 msg success card-panel teal lighten-2">
                     <h4 class="white-text center-align">
                         <?php echo h($success); ?>
                     </h4>
                 </div>
             <?php endif; ?>
             <?php if (isset($error)) : ?>
-                <div class="col offset-m1 m7 s12 msg error card-panel red lighten-1">
+                <div class="col offset-m1 m4 s12 msg error card-panel red lighten-1">
                     <h4 class="white-text center-align">
                         <?php echo h($error); ?>
                     </h4>
@@ -115,6 +132,11 @@
 $(function(){
     // メッセージのフェードアウト
     $('.msg').fadeOut(4000);
+    // materialize select
+    $('select').material_select();
+    $('[name=ym]').change(function() {
+        $("#ym_select").submit();
+    });
     // submit
     $("#my_file").on("change", function() {
         $("#my_form").submit();
@@ -127,12 +149,6 @@ $(function(){
         }
     });
     // window close
-    $(".window-close").click(function() {
-        if (confirm("本当にウィンドウを閉じますか？")) {
-            window.close();
-            return false;
-        }
-    });
     $(".window-close").click(function() {
         if (confirm("本当にウィンドウを閉じますか？")) {
             window.close();

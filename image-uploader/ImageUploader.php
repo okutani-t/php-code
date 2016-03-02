@@ -23,11 +23,11 @@ class ImageUploader {
     public function upload()
     {
         try {
-            // error checkd
+            // バリデーション
             $this->_validateUpload();
-            // type check
+            // 拡張子のチェック
             $ext = $this->_validateImageType();
-            // save
+            // 保存
             $this->_save($ext);
 
             $_SESSION["success"] = "Upload Done!";
@@ -39,7 +39,7 @@ class ImageUploader {
         header("Location: " .
             (empty($_SERVER["HTTPS"]) ? "http://" : "https://") .
             $_SERVER["HTTP_HOST"] .
-            $_SERVER["REQUEST_URI"]);
+            parse_url($_SERVER["REQUEST_URI"])["path"]);
         exit;
     }
 
@@ -58,7 +58,10 @@ class ImageUploader {
             $ext // 拡張子
         );
 
-        $savePath = IMAGES_DIR . "/" . $this->_imageFileName;
+        // 現在の年月のディレクトリを作成
+        $this->createDirs(IMAGES_DIR_YM_NOW);
+
+        $savePath = IMAGES_DIR_YM_NOW . "/" . $this->_imageFileName;
         // tmpファイルをリサイズ
         $this->_resize($_FILES["image"]["tmp_name"]);
 
@@ -73,7 +76,7 @@ class ImageUploader {
 
     /**
      * tmpファイルをリサイズ
-     * リサイズするかどうか判断している
+     * まずはじめにリサイズするかどうか判断している
      *
      * @access private
      * @param string $ext
@@ -89,7 +92,7 @@ class ImageUploader {
     }
 
     /**
-     * 拡張子を判別してリサイズ
+     * 拡張子を判別して実際にリサイズ
      *
      * @access private
      * @param string $tmpPath
@@ -148,15 +151,17 @@ class ImageUploader {
      */
     public function getImages()
     {
-        $images = [];
-        $files = [];
-        $imageDir = opendir(IMAGES_DIR);
+        $images = array();
+        $files = array();
+        $imageDir = opendir(CURRENT_IMAGES_DIR);
         while (false !== ($file = readdir($imageDir))) {
-            if ($file === "." || $file === "..") {
+            if ($file === "."  ||
+                $file === ".." ||
+                $file === ".gitkeep") {
                 continue;
             }
             $files[] = $file;
-            $images[] = basename(IMAGES_DIR) . "/" . $file;
+            $images[] = "images/" . basename(CURRENT_IMAGES_DIR) . "/" . $file;
         }
         array_multisort($files, SORT_DESC, $images);
         return $images;
@@ -179,7 +184,7 @@ class ImageUploader {
             case IMAGETYPE_PNG:
                 return "png";
             default:
-                throw new \Exception("PNG/JPG/PNG only!");
+                throw new \Exception("PNG/JPG/GIF以外はUPLOADできません！");
         }
     }
 
@@ -200,7 +205,7 @@ class ImageUploader {
                 return true;
             case UPLOAD_ERR_INI_SIZE: // php.iniで設定された上限
             case UPLOAD_ERR_FORM_SIZE: // フォームで設定された上限
-                throw new \Exception("File too large!");
+                throw new \Exception("ファイル容量が大きすぎます！");
             default:
                 throw new \Exception("Err: " . $_FILES["image"]["error"]);
         }
@@ -226,6 +231,25 @@ class ImageUploader {
             unset($_SESSION["error"]);
         }
         return [$success, $error];
+    }
+
+    /**
+     * ディレクトリの生成
+     * 指定したパスの途中にあるディレクトリも同時に生成される
+     *
+     * @param string args ディレクトリのパス
+     */
+    private function createDirs(/*args*/)
+    {
+        foreach (func_get_args() as $path) {
+            // ディレクトリが存在していなければ生成
+            if (!file_exists($path)) {
+                // パーミッションの制限を解除
+                umask(0);
+                // ディレクトリ生成
+                mkdir($path, '0777', true);
+            }
+        }
     }
 
 }
