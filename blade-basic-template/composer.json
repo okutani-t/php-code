@@ -1,0 +1,6 @@
+{
+   "require": {
+       "atijust/ronin-blade": "dev-master@dev",
+       "laravelcollective/html": "5.1.*"
+   }
+}
