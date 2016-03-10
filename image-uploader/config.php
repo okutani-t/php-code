@@ -12,6 +12,10 @@ define("MAX_FILE_SIZE", 3 * 1024 * 1024); // 3MB
 // これ以上大きかったら設定した値にリサイズされる
 define("RESIZE_MAX_WIDTH", 2000);
 
+// サムネイル画像の横幅
+define("THUMB_MAX_WIDTH", 400);
+
+
 ///////// ここまで /////////
 
 /**

@@ -40,7 +40,7 @@ $images = $uploader->getImages();
 
 // 画像ディレクトリの捜査
 $images_dirs = opendir(__DIR__ . "/images/");
-$ym_images = array();
+$ym_list = array();
 $files = array();
 while (false !== ($file = readdir($images_dirs))) {
     if ($file === "."  ||
@@ -54,7 +54,7 @@ while (false !== ($file = readdir($images_dirs))) {
     }
     $files[] = $file;
     // ドロップダウン用の配列を作成
-    $ym_images[$file] = date("Y年m月", strtotime($file));
+    $ym_list[$file] = date("Y年m月", strtotime($file));
     // sort
-    array_multisort($files, SORT_DESC, $ym_images);
+    array_multisort($files, SORT_DESC, $ym_list);
 }

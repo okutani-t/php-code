@@ -56,7 +56,7 @@
                         <option value="" disabled <?php if (CURRENT_YM === "") {
                             echo "selected";
                         } ?>>年月を選択 [<?php echo date("Y年m月", time()); ?>]</option>
-                        <?php foreach ($ym_images as $key => $value) : ?>
+                        <?php foreach ($ym_list as $key => $value) : ?>
                             <option value="<?php echo $key ?>" <?php if (CURRENT_YM === $key) {
                                 echo "selected";
                             } ?>><?php echo $value ?></option>
@@ -89,7 +89,8 @@
                 <div class="card-box grid-item col l3 m4 s6">
                     <div class="card hoverable">
                         <div class="card-image">
-                            <img class="materialboxed lazy" data-original="<?php echo h($image); ?>" width="400" alt="Title">
+                            <!-- <img class="materialboxed lazy contain" src="<?php // echo h($image); ?>" width="400" alt="Title"> -->
+                            <img class="materialboxed lazy contain" data-original="thumb.php?url=<?php echo h($image); ?>&width=<?php echo h(THUMB_MAX_WIDTH); ?>" width="400" alt="Title">
                             <span class="card-title">Title</span>
                         </div>
                         <div class="card-content">

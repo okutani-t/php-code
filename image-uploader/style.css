@@ -18,7 +18,11 @@
 .header {
   margin-bottom: 15px;
 }
-
+.contain {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+}
 /*** main ***/
 /*upload btn*/
 .input-field {
