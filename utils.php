@@ -579,11 +579,11 @@ function d()
 
 /**
  * デバッグモードの切り替え
+ * trueならデバッグモード
  */
 function debugMode($flag=true)
 {
-    define('DISPLAY_ERRORS', $flag ? 1 : 0);    // エラーを表示するか否か
-    ini_set('display_errors', DISPLAY_ERRORS);  // エラーがあるとき表示
+    ini_set('display_errors', $flag ? 1 : 0);  // エラーを表示するか否か
     error_reporting(E_ALL ^ E_NOTICE);          // NOTICE エラー以外の全てのエラーを表示
 }
 
