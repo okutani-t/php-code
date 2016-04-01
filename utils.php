@@ -565,14 +565,31 @@ function h($str)
 /**
  * var_dumpのデバッグを見やすく表示
  *
- * @param mixed 複数の引数を取れる
+ * @param mixed カンマ区切りでいくつでも入れられる
+ * @return string スタイルを当てたhtmlコードを含むvar_dumpを返す
  */
 function d()
 {
-    echo '<pre style="background:#fff;color:#333;border:1px solid #ccc;'.
-         'margin:2px;padding:4px;font-family:monospace;font-size:12px;line-height:18px">';
-    foreach (func_get_args() as $value) {
-        var_dump($value);
+    echo '<pre style="background:#fff;color:#333;border:1px solid #ccc;
+            margin:2px;padding:4px;font-family:monospace;font-size:16px;line-height:18px">';
+    foreach (func_get_args() as $v) {
+        var_dump($v);
+    }
+    echo '</pre>';
+}
+
+/**
+ * var_dumpのデバッグを見やすく表示die版
+ *
+ * @param mixed カンマ区切りでいくつでも入れられる
+ * @return string スタイルを当てたhtmlコードを含むvar_dumpを返す
+ */
+function dd()
+{
+    echo '<pre style="background:#fff;color:#333;border:1px solid #ccc;
+            margin:2px;padding:4px;font-family:monospace;font-size:16px;line-height:18px">';
+    foreach (func_get_args() as $v) {
+        die(var_dump($v));
     }
     echo '</pre>';
 }
