@@ -640,4 +640,25 @@ function redirect()
     exit;
 }
 
+/**
+ * yamlファイルをオブジェクトにセット
+ *
+ * @param object $obj
+ * @param string $path yamlファイルのパス
+ * @return object $obj
+ */
+function getYamlObj($obj, $path)
+{
+    // yamlファイル読み込み
+    $Data = Spyc::YAMLLoad($path);
+
+    // objにセット
+    foreach ($Data as $key => $value) {
+        $obj->$key = $value;
+    }
+
+    return $obj;
+}
+
+
 // テスト場所
