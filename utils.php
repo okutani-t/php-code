@@ -660,5 +660,44 @@ function getYamlObj($obj, $path)
     return $obj;
 }
 
+/**
+ * 経過時間整形
+ *
+ * @param int $m 分
+ * @return str ($t+$str)
+ */
+function elapsedTimeFmt($m) {
+    $str = '分';
+    $m = (int)$m;
+    $t = $m;
+
+    if ($m > 59) {
+        $t = floor($m / 60);
+        $str = '時間';
+    }
+
+    if ($m > 60 * 24 - 1) {
+        $t = floor($m / (60 * 24));
+        $str = '日';
+    }
+
+    if ($m > 60 * 24 * 7 - 1) {
+        $t = floor($m / (60 * 24 * 7));
+        $str = '週間';
+    }
+
+    if ($m > 60 * 24 * 30 - 1) {
+        $t = floor($m / (60 * 24 * 30));
+        $str = 'ヶ月';
+    }
+
+    if ($m > 60 * 24 * 365 - 1) {
+        $t = floor($m / (60 * 24 * 365));
+        $str = '年';
+    }
+
+    return $t . $str;
+}
+
 
 // テスト場所
